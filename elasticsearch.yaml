@@ -1,0 +1,24 @@
+apiVersion: elasticsearch.k8s.elastic.co/v1beta1
+kind: Elasticsearch
+metadata:
+  name: quickstart
+spec:
+  version: 7.13.4
+  nodeSets:
+  - count: 3
+    name: default
+    config:
+      node.master: true
+      node.data: true
+      node.ingest: true
+      node.store.allow_mmap: false
+    podTemplate:
+      spec:
+        volumes:
+        - name: elasticsearch-data
+          emptyDir: {}
+  http:
+    service:
+      spec:
+        # expose this cluster Service with a LoadBalancer
+        type: LoadBalancer
